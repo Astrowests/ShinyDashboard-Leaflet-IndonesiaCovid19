@@ -1,0 +1,12 @@
+name: Covid19onIndonesia
+title: Covid19onIndonesia
+username:
+account: astrowest
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3422290
+bundleId: 4015623
+url: https://astrowest.shinyapps.io/Covid19onIndonesia/
+when: 1608565221.84183
+asMultiple: FALSE
+asStatic: FALSE

@@ -1,0 +1,135 @@
+---
+title: "IndonesiaCovid19Analysis"
+author: "Riyan Sthefanus N"
+date: "12/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(tidyverse)
+data %>% 
+            group_by(Location) %>% 
+            mutate(n_death = max(`Total Deaths`),n_Cases=max(`Total Cases`),n_ActiveCases=max(`Total Active Cases`),n_Total_Recovered=max(`Total Recovered`)) %>% 
+  filter(Location=='DKI Jakarta')
+
+table(is.na(data$Province))
+
+coba<- data %>% 
+            group_by(Province) %>% 
+            filter(Province != "Semua") %>% 
+            arrange(desc(`Total Cases`)) %>% 
+            filter(`Total Cases` == max(`Total Cases`)) %>% 
+            distinct() %>% 
+            ungroup() %>% 
+            mutate(n_death = sum(`Total Deaths`),n_Cases=sum(`Total Cases`),n_ActiveCases=sum(`Total Active Cases`),n_Total_Recovered=sum(`Total Recovered`))
+coba
+```
+
+
+```{r cars}
+library(lubridate)
+seq(from = ymd("2020-12-21"),to = ymd("2020-12-31"),by = "day")
+data <- read_csv("data_input/covid_19_indonesia_time_series_all.csv")
+total_Summary <- data %>% 
+            filter(Location != 'Indonesia') %>% 
+            filter(Date>="2020-03-01" & Date <="2020-03-02") %>%  
+            arrange(desc(`Total Cases`)) %>% 
+            top_n(n = 1,wt = `Total Cases`) %>% 
+            distinct() %>% 
+            ungroup() %>% 
+            mutate(n_death = sum(`Total Deaths`),n_Cases=sum(`Total Cases`),n_ActiveCases=sum(`Total Active Cases`),n_Total_Recovered=sum(`Total Recovered`))
+        
+glimpse(data)
+
+total_Summary
+library(plotly)
+plot  
+```
+
+
+```{r cars}
+plot<- data %>% 
+  g
+
+```
+
+```{r}
+data %>% filter(Location=='DKI Jakarta')
+
+library(lubridate)
+data <- data %>% mutate(Date=mdy(Date),
+                `Case Fatality Rate`= as.double(str_replace(`Case Fatality Rate`,"%","")),
+                `Case Recovered Rate`=as.double(str_replace(`Case Recovered Rate`,"%",""))) %>% 
+    mutate_at(vars(`Location ISO Code`,Location,`Location Level`,`City or Regency`,Province,Country,Continent,Island,`Special Status`,`Total Regencies`,`Total Cities`,`Total Districts`,`Total Districts`,`Total Urban Villages`,`Total Rural Villages`,Population,`Population Density`),as.factor) %>% 
+  mutate_at(vars(`Case Fatality Rate`,`Case Recovered Rate`),as.double)
+
+
+
+```
+```{r}
+data
+```
+
+```{r}
+#TOTAL MATI
+
+total_Summary <- data %>% 
+  filter(Location != "Indonesia") %>% 
+  select(Location,`Total Deaths`,`Total Cases`,`Total Active Cases`,`Total Recovered`) %>% 
+  group_by(Location) %>% 
+  arrange(desc(`Total Cases`)) %>% 
+  top_n(n = 1,wt = `Total Cases`) %>% 
+  distinct() %>% 
+  ungroup() %>% 
+  summarise(n_death = sum(`Total Deaths`),n_Cases=sum(`Total Cases`),n_ActiveCases=sum(`Total Active Cases`),n_Total_Recovered=sum(`Total Recovered`))
+
+total_Summary
+
+
+
+```
+
+```{r}
+data %>% 
+            group_by(Location,Date) %>% 
+            filter(Province !="Semua") %>% 
+            arrange(desc(`Total Cases`)) %>%
+             ungroup() %>% 
+            distinct() %>% 
+            
+            mutate(n_death = sum(`Total Deaths`),n_Cases=sum(`Total Cases`),n_ActiveCases=sum(`Total Active Cases`),n_Total_Recovered=sum(`Total Recovered`),keparahan = `Total Cases`/`Population Density`)
+        
+  
+library(leaflet)
+data %>% filter(Location != 'Indonesia') %>%
+```
+
+
+```{r}
+datanya <- data %>% filter(Location!='Indonesia') %>% 
+  group_by(Longitude,Latitude)
+
+map <- leaflet( ) %>% 
+  addTiles() %>% 
+  addMarkers(datanya$Longitude,datanya$Latitude)
+map
+names(data)
+data %>% group_by(Location) %>% 
+  filter(Location == 'DKI Jakarta') %>% 
+  select(`Population Density`) %>% 
+  unique()
+```
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
